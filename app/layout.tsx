@@ -34,7 +34,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <NeonAuthUIProvider authClient={authClient} emailOTP credentials={{ forgotPassword: true }}>
+        <NeonAuthUIProvider authClient={authClient} emailOTP>
           {children}
           <Toaster
             theme="dark"
