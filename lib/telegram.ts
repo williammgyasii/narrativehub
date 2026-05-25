@@ -28,7 +28,9 @@ export async function sendTelegramNotification(message: string) {
     const client = await getClient();
     if (!client) return;
 
-    await client.sendMessage("me", { message, parseMode: "html" });
+    const channel = process.env.TELEGRAM_CHANNEL;
+    const target = channel ? Number(channel) : "me";
+    await client.sendMessage(target, { message, parseMode: "html" });
   } catch {
     // Don't let Telegram errors block the webhook
   }
