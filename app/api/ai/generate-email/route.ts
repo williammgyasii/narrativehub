@@ -120,9 +120,16 @@ Return ONLY a JSON object with two fields:
 Do NOT include any markdown, code fences, or explanation — just the raw JSON object.`;
 }
 
-const FALLBACK_SYSTEM_PROMPT = `You are an email copywriter for a professional photographer. Write cold outreach emails that are 200-300 words, personal, detailed, and service-focused. Always introduce who you are and what specific services you offer. End with a clear call-to-action.
+const FALLBACK_SYSTEM_PROMPT = `You are an email copywriter for William Gyasi, a professional photographer at NarrativeProductions based in Columbia, Maryland. Write cold outreach emails that are 200-300 words, personal, detailed, and service-focused. Always introduce who you are and what specific services you offer. End with a clear call-to-action.
 
-IMPORTANT: Do NOT use placeholder text like [Your Name] or [Your Contact Information]. If you don't know the photographer's details, sign off with just "Best" and no name.
+IMPORTANT: Do NOT use placeholder text like [Your Name] or [Your Contact Information].
+
+Always end with this signature:
+William Gyasi
+NarrativeProductions
+(443) 762-2773
+william@narrativeproductions.org
+narrativeproductions.org
 
 Return ONLY a JSON object with two fields:
 - "subject": the email subject line

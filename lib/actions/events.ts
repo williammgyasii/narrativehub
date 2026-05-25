@@ -129,6 +129,48 @@ export async function updateGearChecklist(
   revalidatePath(`/events/${id}`);
 }
 
+export async function updateEventDescription(id: string, description: string) {
+  const userId = await getAuthUser();
+  await db
+    .update(events)
+    .set({ description, updatedAt: new Date() })
+    .where(and(eq(events.id, id), eq(events.userId, userId)));
+  revalidatePath(`/events/${id}`);
+}
+
+export async function updateClientRequests(id: string, clientRequests: string) {
+  const userId = await getAuthUser();
+  await db
+    .update(events)
+    .set({ clientRequests, updatedAt: new Date() })
+    .where(and(eq(events.id, id), eq(events.userId, userId)));
+  revalidatePath(`/events/${id}`);
+}
+
+export async function updateMoodboard(
+  id: string,
+  moodboard: { type: "image" | "url" | "note"; content: string; caption?: string }[]
+) {
+  const userId = await getAuthUser();
+  await db
+    .update(events)
+    .set({ moodboard, updatedAt: new Date() })
+    .where(and(eq(events.id, id), eq(events.userId, userId)));
+  revalidatePath(`/events/${id}`);
+}
+
+export async function updatePaymentLog(
+  id: string,
+  paymentLog: { date: string; label: string; amount?: number }[]
+) {
+  const userId = await getAuthUser();
+  await db
+    .update(events)
+    .set({ paymentLog, updatedAt: new Date() })
+    .where(and(eq(events.id, id), eq(events.userId, userId)));
+  revalidatePath(`/events/${id}`);
+}
+
 export async function deleteEvent(id: string) {
   const userId = await getAuthUser();
 

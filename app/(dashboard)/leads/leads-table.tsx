@@ -289,12 +289,12 @@ export function LeadsTable({ data }: { data: Lead[] }) {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <Input
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           placeholder="Search leads..."
-          className="max-w-xs border-white/10 bg-white/5 text-white placeholder:text-zinc-600"
+          className="w-full sm:max-w-xs border-white/10 bg-white/5 text-white placeholder:text-zinc-600"
         />
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[150px] border-white/10 bg-white/5 text-white">
@@ -343,7 +343,7 @@ export function LeadsTable({ data }: { data: Lead[] }) {
 
       {/* Bulk Actions Bar */}
       {selectedCount > 0 && (
-        <div className="flex items-center gap-3 rounded-lg border border-gold/20 bg-gold/5 px-4 py-2.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 rounded-lg border border-gold/20 bg-gold/5 px-3 sm:px-4 py-2.5">
           <span className="text-sm font-medium text-gold">
             {selectedCount} selected
           </span>

@@ -26,7 +26,7 @@ export default async function LeadFinderPage() {
       />
 
       <Tabs defaultValue="discover" className="space-y-4">
-        <TabsList className="bg-surface border border-white/10">
+        <TabsList className="bg-surface border border-white/10 overflow-x-auto no-scrollbar w-full justify-start">
           <TabsTrigger
             value="discover"
             className="flex items-center gap-1.5 data-[state=active]:bg-gold/10 data-[state=active]:text-gold"

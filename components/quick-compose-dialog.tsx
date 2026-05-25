@@ -253,19 +253,19 @@ export function QuickComposeDialog({
                   {lead.businessName ? ` at ${lead.businessName}` : ""}
                 </p>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
                   placeholder={
                     lead.leadType === "wedding"
-                      ? 'e.g. "Pitch a venue partnership — I want to be on their preferred vendor list"'
+                      ? 'e.g. "Pitch a venue partnership"'
                       : lead.leadType === "corporate"
-                        ? 'e.g. "Offer headshot and event photography services for their team"'
+                        ? 'e.g. "Offer headshot services"'
                         : lead.leadType === "real_estate"
-                          ? 'e.g. "Offer listing photography — highlight faster sales with pro photos"'
-                          : 'e.g. "Introduce my photography services and suggest a collaboration"'
+                          ? 'e.g. "Offer listing photography"'
+                          : 'e.g. "Introduce my services"'
                   }
                   className="flex-1 border-purple-500/20 bg-white/5 text-white placeholder:text-zinc-600 text-sm"
                 />
@@ -274,7 +274,7 @@ export function QuickComposeDialog({
                   size="sm"
                   onClick={handleGenerate}
                   disabled={isGenerating || !aiPrompt.trim()}
-                  className="bg-purple-600 text-white hover:bg-purple-500"
+                  className="bg-purple-600 text-white hover:bg-purple-500 w-full sm:w-auto"
                 >
                   {isGenerating ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -304,8 +304,8 @@ export function QuickComposeDialog({
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder="Write your email here..."
-              rows={14}
-              className="border-white/10 bg-white/5 text-white placeholder:text-zinc-600 resize-none min-h-[280px]"
+              rows={8}
+              className="border-white/10 bg-white/5 text-white placeholder:text-zinc-600 resize-none min-h-[160px] sm:min-h-[280px] sm:rows-[14]"
             />
             <p className="text-[11px] text-zinc-600">
               Variables: {"{{name}}"}, {"{{business}}"}, {"{{lead_type}}"}
@@ -315,7 +315,7 @@ export function QuickComposeDialog({
 
         {/* Footer */}
         <SheetFooter className="border-t border-white/10 pt-3">
-          <div className="flex w-full justify-end gap-2">
+          <div className="flex w-full flex-col-reverse sm:flex-row sm:justify-end gap-2">
             <Button
               variant="outline"
               size="sm"

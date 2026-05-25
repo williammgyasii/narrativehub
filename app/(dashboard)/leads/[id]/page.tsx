@@ -106,29 +106,29 @@ export default async function LeadDetailPage({
       </Button>
 
       {/* Hero Header */}
-      <div className="rounded-xl border border-white/10 bg-surface p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <h1 className="font-heading text-2xl font-bold tracking-tight text-white">
+      <div className="rounded-xl border border-white/10 bg-surface p-4 sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <h1 className="font-heading text-lg sm:text-2xl font-bold tracking-tight text-white">
                 {lead.name}
               </h1>
               <LeadTypeBadge type={lead.leadType} />
             </div>
             {lead.businessName && lead.businessName !== lead.name && (
               <p className="flex items-center gap-1.5 text-sm text-zinc-400">
-                <Building2 className="h-3.5 w-3.5" />
-                {lead.businessName}
+                <Building2 className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{lead.businessName}</span>
               </p>
             )}
             {extracted?.address && (
               <p className="flex items-center gap-1.5 text-xs text-zinc-500">
-                <MapPin className="h-3 w-3" />
-                {extracted.address}
+                <MapPin className="h-3 w-3 shrink-0" />
+                <span className="truncate">{extracted.address}</span>
               </p>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-start">
             <LeadStatusSelect leadId={lead.id} currentStatus={lead.status} />
             <form action={deleteAction}>
               <Button
@@ -138,29 +138,29 @@ export default async function LeadDetailPage({
                 className="border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300"
               >
                 <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                Delete
+                <span className="hidden sm:inline">Delete</span>
               </Button>
             </form>
           </div>
         </div>
 
         {/* Contact Row */}
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
           {lead.email && (
             <a
               href={`mailto:${lead.email}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs sm:text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors truncate max-w-full"
             >
-              <Mail className="h-3.5 w-3.5" />
-              {lead.email}
+              <Mail className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{lead.email}</span>
             </a>
           )}
           {lead.phone && (
             <a
               href={`tel:${lead.phone}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs sm:text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors"
             >
-              <Phone className="h-3.5 w-3.5" />
+              <Phone className="h-3.5 w-3.5 shrink-0" />
               {lead.phone}
             </a>
           )}
@@ -169,11 +169,11 @@ export default async function LeadDetailPage({
               href={extracted.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs sm:text-sm text-zinc-200 hover:border-gold/30 hover:text-gold transition-colors truncate max-w-full"
             >
-              <Globe className="h-3.5 w-3.5" />
-              {extracted.website.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-              <ExternalLink className="h-3 w-3" />
+              <Globe className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{extracted.website.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</span>
+              <ExternalLink className="h-3 w-3 shrink-0" />
             </a>
           )}
           {extracted?.facebook && (
@@ -194,7 +194,7 @@ export default async function LeadDetailPage({
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-4 flex gap-2">
+        <div className="mt-3 sm:mt-4 flex flex-wrap gap-2">
           {lead.email && (
             <QuickComposeDialog
               lead={{
@@ -216,7 +216,7 @@ export default async function LeadDetailPage({
         </div>
 
         {/* Meta */}
-        <div className="mt-4 flex flex-wrap gap-4 text-xs text-zinc-500">
+        <div className="mt-3 sm:mt-4 flex flex-wrap gap-3 sm:gap-4 text-[11px] sm:text-xs text-zinc-500">
           <span className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             Added {formatRelativeDate(lead.createdAt)}

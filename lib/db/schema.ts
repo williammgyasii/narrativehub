@@ -86,6 +86,14 @@ export const events = pgTable("events", {
   gearChecklist: jsonb("gear_checklist")
     .$type<{ item: string; checked: boolean; rentalCost?: number; gearItemId?: string }[]>()
     .default([]),
+  description: text("description"),
+  clientRequests: text("client_requests"),
+  moodboard: jsonb("moodboard")
+    .$type<{ type: "image" | "url" | "note"; content: string; caption?: string }[]>()
+    .default([]),
+  paymentLog: jsonb("payment_log")
+    .$type<{ date: string; label: string; amount?: number }[]>()
+    .default([]),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

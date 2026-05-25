@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -16,6 +16,8 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeft,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth/client";
@@ -41,8 +43,10 @@ const navItems = [
 
 const SidebarContext = createContext<{
   collapsed: boolean;
+  mobileOpen: boolean;
   toggle: () => void;
-}>({ collapsed: false, toggle: () => {} });
+  setMobileOpen: (open: boolean) => void;
+}>({ collapsed: false, mobileOpen: false, toggle: () => {}, setMobileOpen: () => {} });
 
 export function useSidebar() {
   return useContext(SidebarContext);
@@ -50,52 +54,92 @@ export function useSidebar() {
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const toggle = useCallback(() => setCollapsed((c) => !c), []);
 
   return (
-    <SidebarContext.Provider value={{ collapsed, toggle }}>
+    <SidebarContext.Provider value={{ collapsed, toggle, mobileOpen, setMobileOpen }}>
       {children}
     </SidebarContext.Provider>
   );
 }
 
+export function MobileMenuButton() {
+  const { setMobileOpen } = useSidebar();
+  return (
+    <button
+      onClick={() => setMobileOpen(true)}
+      className="fixed top-3 left-3 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-surface text-zinc-400 hover:text-white md:hidden"
+      aria-label="Open menu"
+    >
+      <Menu className="h-5 w-5" />
+    </button>
+  );
+}
+
 export function Sidebar() {
   const pathname = usePathname();
-  const { collapsed, toggle } = useSidebar();
+  const { collapsed, toggle, mobileOpen, setMobileOpen } = useSidebar();
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname, setMobileOpen]);
 
   return (
     <TooltipProvider delayDuration={0}>
+      {/* Backdrop for mobile */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/6 bg-[#0d0d0d] transition-all duration-300",
-          collapsed ? "w-16" : "w-64"
+          // Mobile: off-screen by default, slide in when open
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
+          "md:translate-x-0",
+          // Desktop: respect collapsed state; Mobile: always full-width sidebar
+          "w-64",
+          collapsed && "md:w-16"
         )}
       >
         {/* Logo + collapse toggle */}
         <div className="flex h-16 items-center justify-between px-3">
-          <div className={cn("flex items-center gap-2", collapsed && "justify-center w-full")}>
+          <div className={cn("flex items-center gap-2", collapsed && "md:justify-center md:w-full")}>
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gold/10">
               <Camera className="h-4 w-4 text-gold" />
             </div>
-            {!collapsed && (
-              <span className="font-heading text-xl font-bold tracking-tight text-white">
-                Unscripted
-              </span>
-            )}
+            <span className={cn(
+              "font-heading text-xl font-bold tracking-tight text-white",
+              collapsed && "md:hidden"
+            )}>
+              Unscripted
+            </span>
           </div>
+          {/* Mobile close button */}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="rounded-md p-1.5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300 transition-colors md:hidden"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          {/* Desktop collapse button */}
           {!collapsed && (
             <button
               onClick={toggle}
-              className="rounded-md p-1.5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300 transition-colors"
+              className="hidden md:block rounded-md p-1.5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300 transition-colors"
             >
               <PanelLeftClose className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        {/* Expand button when collapsed */}
+        {/* Expand button when collapsed (desktop only) */}
         {collapsed && (
-          <div className="flex justify-center py-1">
+          <div className="hidden md:flex justify-center py-1">
             <button
               onClick={toggle}
               className="rounded-md p-1.5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300 transition-colors"
@@ -106,7 +150,7 @@ export function Sidebar() {
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 px-2 py-4">
+        <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -119,7 +163,7 @@ export function Sidebar() {
                 className={cn(
                   "group relative flex items-center rounded-lg text-sm font-medium transition-all",
                   collapsed
-                    ? "justify-center p-2.5"
+                    ? "md:justify-center md:p-2.5 justify-start gap-3 px-3 py-2.5"
                     : "gap-3 px-3 py-2.5",
                   isActive
                     ? "bg-gold/10 text-gold"
@@ -135,7 +179,9 @@ export function Sidebar() {
                     isActive ? "text-gold" : "text-zinc-500 group-hover:text-zinc-400"
                   )}
                 />
-                {!collapsed && item.label}
+                <span className={cn(collapsed && "md:hidden")}>
+                  {item.label}
+                </span>
               </Link>
             );
 
@@ -143,7 +189,7 @@ export function Sidebar() {
               return (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
-                  <TooltipContent side="right" className="bg-surface-hover text-zinc-200 border-white/10">
+                  <TooltipContent side="right" className="hidden md:block bg-surface-hover text-zinc-200 border-white/10">
                     {item.label}
                   </TooltipContent>
                 </Tooltip>
@@ -157,16 +203,37 @@ export function Sidebar() {
         {/* User section */}
         <div className="border-t border-white/6 p-3">
           {collapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex justify-center">
-                  <UserButton size="icon" />
+            <>
+              {/* Desktop collapsed: icon only with tooltip */}
+              <div className="hidden md:block">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex justify-center">
+                      <UserButton size="icon" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="bg-surface-hover text-zinc-200 border-white/10">
+                    My Account
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              {/* Mobile: always show full user section */}
+              <div className="flex md:hidden items-center gap-3">
+                <UserButton size="icon" />
+                <div className="flex-1 min-w-0">
+                  <Link href="/account/settings" className="truncate text-sm font-medium text-zinc-200 hover:text-white">
+                    My Account
+                  </Link>
+                  <button
+                    onClick={() => authClient.signOut()}
+                    className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                  >
+                    <LogOut className="h-3 w-3" />
+                    Sign out
+                  </button>
                 </div>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="bg-surface-hover text-zinc-200 border-white/10">
-                My Account
-              </TooltipContent>
-            </Tooltip>
+              </div>
+            </>
           ) : (
             <div className="flex items-center gap-3">
               <UserButton size="icon" />
