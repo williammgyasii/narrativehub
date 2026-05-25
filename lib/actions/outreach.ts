@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { outreach, outreachTemplates, leads } from "@/lib/db/schema";
 import { eq, and, inArray } from "drizzle-orm";
-import { sendEmail } from "@/lib/resend";
+import { sendEmail, buildReplyToAddress } from "@/lib/resend";
 import { z } from "zod";
 
 const templateSchema = z.object({
@@ -95,22 +95,32 @@ export async function sendOutreach(formData: FormData) {
   if (!lead.email) return { error: "Lead has no email address" };
 
   try {
+    const [outreachRow] = await db
+      .insert(outreach)
+      .values({
+        userId,
+        leadId,
+        templateId,
+        subject,
+        body,
+        sentAt: new Date(),
+        status: "sent",
+      })
+      .returning();
+
+    const replyTo = buildReplyToAddress(outreachRow.id);
+
     const { id: resendId } = await sendEmail({
       to: lead.email,
       subject,
       body,
+      replyTo,
     });
 
-    await db.insert(outreach).values({
-      userId,
-      leadId,
-      templateId,
-      subject,
-      body,
-      sentAt: new Date(),
-      status: "sent",
-      resendId: resendId || null,
-    });
+    await db
+      .update(outreach)
+      .set({ resendId: resendId || null })
+      .where(eq(outreach.id, outreachRow.id));
 
     await db
       .update(leads)
@@ -153,22 +163,32 @@ export async function sendOutreachDirect(data: {
   if (!lead.email) return { error: "Lead has no email address" };
 
   try {
+    const [outreachRow] = await db
+      .insert(outreach)
+      .values({
+        userId,
+        leadId: data.leadId,
+        templateId: data.templateId || null,
+        subject: data.subject,
+        body: data.body,
+        sentAt: new Date(),
+        status: "sent",
+      })
+      .returning();
+
+    const replyTo = buildReplyToAddress(outreachRow.id);
+
     const { id: resendId } = await sendEmail({
       to: lead.email,
       subject: data.subject,
       body: data.body,
+      replyTo,
     });
 
-    await db.insert(outreach).values({
-      userId,
-      leadId: data.leadId,
-      templateId: data.templateId || null,
-      subject: data.subject,
-      body: data.body,
-      sentAt: new Date(),
-      status: "sent",
-      resendId: resendId || null,
-    });
+    await db
+      .update(outreach)
+      .set({ resendId: resendId || null })
+      .where(eq(outreach.id, outreachRow.id));
 
     await db
       .update(leads)
@@ -268,10 +288,13 @@ export async function sendDraft(
   if (!lead.email) return { error: "Lead has no email address" };
 
   try {
+    const replyTo = buildReplyToAddress(draftId);
+
     const { id: resendId } = await sendEmail({
       to: lead.email,
       subject: draft.subject,
       body: draft.body,
+      replyTo,
     });
 
     await db
@@ -362,22 +385,32 @@ export async function sendBulkOutreach(data: {
     const body = mergeTemplate(data.bodyTemplate, lead);
 
     try {
+      const [outreachRow] = await db
+        .insert(outreach)
+        .values({
+          userId,
+          leadId: lead.id,
+          templateId: data.templateId || null,
+          subject,
+          body,
+          sentAt: new Date(),
+          status: "sent",
+        })
+        .returning();
+
+      const replyTo = buildReplyToAddress(outreachRow.id);
+
       const { id: resendId } = await sendEmail({
         to: lead.email,
         subject,
         body,
+        replyTo,
       });
 
-      await db.insert(outreach).values({
-        userId,
-        leadId: lead.id,
-        templateId: data.templateId || null,
-        subject,
-        body,
-        sentAt: new Date(),
-        status: "sent",
-        resendId: resendId || null,
-      });
+      await db
+        .update(outreach)
+        .set({ resendId: resendId || null })
+        .where(eq(outreach.id, outreachRow.id));
 
       await db
         .update(leads)

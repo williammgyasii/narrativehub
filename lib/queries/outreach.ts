@@ -2,8 +2,13 @@ import "server-only";
 
 import { getAuthUserOrNull } from "@/lib/auth/server";
 import { db } from "@/lib/db";
-import { outreach, outreachTemplates, leads } from "@/lib/db/schema";
-import { eq, and, desc, lt } from "drizzle-orm";
+import {
+  outreach,
+  outreachTemplates,
+  leads,
+  inboundEmails,
+} from "@/lib/db/schema";
+import { eq, and, desc, lt, asc } from "drizzle-orm";
 
 export async function getOutreachLog() {
   const userId = await getAuthUserOrNull();
@@ -132,4 +137,100 @@ export async function getOutreachStats() {
   }
 
   return stats;
+}
+
+export async function getInboundByLeadId(leadId: string) {
+  const userId = await getAuthUserOrNull();
+  if (!userId) return [];
+
+  return db
+    .select()
+    .from(inboundEmails)
+    .where(
+      and(eq(inboundEmails.userId, userId), eq(inboundEmails.leadId, leadId))
+    )
+    .orderBy(asc(inboundEmails.receivedAt));
+}
+
+export async function getInboundByOutreachId(outreachId: string) {
+  const userId = await getAuthUserOrNull();
+  if (!userId) return [];
+
+  return db
+    .select()
+    .from(inboundEmails)
+    .where(
+      and(
+        eq(inboundEmails.userId, userId),
+        eq(inboundEmails.outreachId, outreachId)
+      )
+    )
+    .orderBy(asc(inboundEmails.receivedAt));
+}
+
+export type ConversationMessage = {
+  id: string;
+  type: "sent" | "received";
+  subject: string | null;
+  body: string | null;
+  date: Date;
+  from: string;
+  to: string;
+};
+
+export async function getConversationByLeadId(
+  leadId: string
+): Promise<ConversationMessage[]> {
+  const userId = await getAuthUserOrNull();
+  if (!userId) return [];
+
+  const [sentEmails, receivedEmails] = await Promise.all([
+    db
+      .select()
+      .from(outreach)
+      .where(
+        and(
+          eq(outreach.userId, userId),
+          eq(outreach.leadId, leadId),
+          eq(outreach.status, "sent")
+        )
+      ),
+    db
+      .select()
+      .from(inboundEmails)
+      .where(
+        and(
+          eq(inboundEmails.userId, userId),
+          eq(inboundEmails.leadId, leadId)
+        )
+      ),
+  ]);
+
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "you";
+
+  const messages: ConversationMessage[] = [
+    ...sentEmails
+      .filter((e) => e.sentAt)
+      .map((e) => ({
+        id: e.id,
+        type: "sent" as const,
+        subject: e.subject,
+        body: e.body,
+        date: e.sentAt!,
+        from: fromEmail,
+        to: "lead",
+      })),
+    ...receivedEmails.map((e) => ({
+      id: e.id,
+      type: "received" as const,
+      subject: e.subject,
+      body: e.body,
+      date: e.receivedAt,
+      from: e.from,
+      to: e.to,
+    })),
+  ];
+
+  messages.sort((a, b) => a.date.getTime() - b.date.getTime());
+  return messages;
 }

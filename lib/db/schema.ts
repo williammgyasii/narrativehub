@@ -193,6 +193,22 @@ export const skippedPlaces = pgTable("skipped_places", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const inboundEmails = pgTable("inbound_emails", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  leadId: uuid("lead_id").references(() => leads.id, { onDelete: "cascade" }),
+  outreachId: uuid("outreach_id").references(() => outreach.id, {
+    onDelete: "set null",
+  }),
+  resendEmailId: text("resend_email_id").notNull(),
+  from: text("from_address").notNull(),
+  to: text("to_address").notNull(),
+  subject: text("subject"),
+  body: text("body"),
+  receivedAt: timestamp("received_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // ── Types ──────────────────────────────────────────────
 
 export type Lead = typeof leads.$inferSelect;
@@ -211,3 +227,5 @@ export type RedditLead = typeof redditLeads.$inferSelect;
 export type NewRedditLead = typeof redditLeads.$inferInsert;
 export type PhotographerProfile = typeof photographerProfiles.$inferSelect;
 export type NewPhotographerProfile = typeof photographerProfiles.$inferInsert;
+export type InboundEmail = typeof inboundEmails.$inferSelect;
+export type NewInboundEmail = typeof inboundEmails.$inferInsert;

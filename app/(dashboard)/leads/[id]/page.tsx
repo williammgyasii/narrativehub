@@ -14,6 +14,7 @@ import {
   MessageSquare,
   MapPin,
   ExternalLink,
+  Inbox,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +25,10 @@ import { QuickComposeDialog } from "@/components/quick-compose-dialog";
 import { BookEventSheet } from "@/components/book-event-sheet";
 import { LeadForm } from "@/components/lead-form";
 import { getLeadById } from "@/lib/queries/leads";
-import { getOutreachByLeadId } from "@/lib/queries/outreach";
+import {
+  getOutreachByLeadId,
+  getConversationByLeadId,
+} from "@/lib/queries/outreach";
 import { getEventsByLeadId } from "@/lib/queries/events";
 import { deleteLead } from "@/lib/actions/leads";
 import { formatDate, formatRelativeDate } from "@/lib/format";
@@ -71,11 +75,13 @@ export default async function LeadDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [lead, outreachHistory, linkedEvents] = await Promise.all([
-    getLeadById(id),
-    getOutreachByLeadId(id),
-    getEventsByLeadId(id),
-  ]);
+  const [lead, outreachHistory, linkedEvents, conversation] =
+    await Promise.all([
+      getLeadById(id),
+      getOutreachByLeadId(id),
+      getEventsByLeadId(id),
+      getConversationByLeadId(id),
+    ]);
 
   if (!lead) notFound();
 
@@ -230,23 +236,23 @@ export default async function LeadDetailPage({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Left Column — Activity Timeline */}
         <div className="space-y-6 lg:col-span-2">
-          {/* Outreach History */}
+          {/* Conversation Timeline */}
           <Card className="border-white/10 bg-surface">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-zinc-400">
-                  Outreach History
+                  Conversation
                 </CardTitle>
                 <Badge variant="outline" className="border-white/10 text-zinc-500 text-xs">
-                  {outreachHistory.length} email{outreachHistory.length !== 1 ? "s" : ""}
+                  {conversation.length} message{conversation.length !== 1 ? "s" : ""}
                 </Badge>
               </div>
             </CardHeader>
             <CardContent>
-              {outreachHistory.length === 0 ? (
+              {conversation.length === 0 ? (
                 <div className="flex flex-col items-center py-8 text-center">
                   <Mail className="mb-2 h-8 w-8 text-zinc-700" />
-                  <p className="text-sm text-zinc-500">No outreach yet</p>
+                  <p className="text-sm text-zinc-500">No messages yet</p>
                   {lead.email && (
                     <p className="mt-1 text-xs text-zinc-600">
                       Send your first email to start the conversation
@@ -255,35 +261,47 @@ export default async function LeadDetailPage({
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {outreachHistory.map((entry) => {
-                    const Icon = statusIcons[entry.status] || Send;
+                  {conversation.map((msg) => {
+                    const isSent = msg.type === "sent";
+                    const Icon = isSent ? Send : Inbox;
+                    const colorClass = isSent
+                      ? "border-blue-500/20 bg-blue-500/10 text-blue-400"
+                      : "border-emerald-500/20 bg-emerald-500/10 text-emerald-400";
+
                     return (
                       <div
-                        key={entry.id}
-                        className="flex items-start gap-3 rounded-lg border border-white/5 bg-white/2 p-3"
+                        key={msg.id}
+                        className={`flex items-start gap-3 rounded-lg border p-3 ${
+                          isSent
+                            ? "border-white/5 bg-white/2"
+                            : "border-emerald-500/10 bg-emerald-500/5"
+                        }`}
                       >
-                        <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border ${statusColors[entry.status] || statusColors.draft}`}>
+                        <div
+                          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border ${colorClass}`}
+                        >
                           <Icon className="h-3.5 w-3.5" />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-2">
                             <p className="text-sm font-medium text-white truncate">
-                              {entry.subject}
+                              {msg.subject || "(No subject)"}
                             </p>
                             <Badge
                               variant="outline"
-                              className={`shrink-0 text-[10px] ${statusColors[entry.status] || statusColors.draft}`}
+                              className={`shrink-0 text-[10px] ${colorClass}`}
                             >
-                              {entry.status}
+                              {isSent ? "Sent" : "Received"}
                             </Badge>
                           </div>
-                          <p className="mt-0.5 text-xs text-zinc-500 line-clamp-1">
-                            {entry.body.replace(/<[^>]+>/g, "").slice(0, 100)}
-                          </p>
+                          {msg.body && (
+                            <p className="mt-0.5 text-xs text-zinc-500 line-clamp-2">
+                              {msg.body.replace(/<[^>]+>/g, "").slice(0, 200)}
+                            </p>
+                          )}
                           <p className="mt-1 text-[11px] text-zinc-600">
-                            {entry.sentAt
-                              ? formatDate(entry.sentAt)
-                              : formatDate(entry.createdAt)}
+                            {isSent ? "You" : msg.from} &middot;{" "}
+                            {formatDate(msg.date)}
                           </p>
                         </div>
                       </div>

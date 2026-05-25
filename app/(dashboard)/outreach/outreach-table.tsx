@@ -16,6 +16,7 @@ import {
   Send,
   Trash2,
   FileEdit,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -129,11 +130,19 @@ export function OutreachTable({ data }: { data: OutreachEntry[] }) {
       }),
       columnHelper.accessor("outreach.status", {
         header: "Status",
-        cell: (info) => (
-          <Badge variant="outline" className={statusStyles[info.getValue()]}>
-            {info.getValue()}
-          </Badge>
-        ),
+        cell: (info) => {
+          const status = info.getValue();
+          return (
+            <div className="flex items-center gap-1.5">
+              <Badge variant="outline" className={statusStyles[status]}>
+                {status === "replied" && (
+                  <MessageSquare className="mr-1 h-3 w-3" />
+                )}
+                {status}
+              </Badge>
+            </div>
+          );
+        },
       }),
       columnHelper.display({
         id: "date",
