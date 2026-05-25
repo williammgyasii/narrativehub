@@ -17,7 +17,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Unscripted — Photography Business OS",
+  title: "NarrativeHub — Photography Business OS",
   description:
     "Lead discovery, pipeline management, and business tracking for solo photographers.",
 };
@@ -34,7 +34,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <NeonAuthUIProvider authClient={authClient} emailOTP>
+        <NeonAuthUIProvider authClient={authClient} emailOTP credentials={{ forgotPassword: true }}>
           {children}
           <Toaster
             theme="dark"
