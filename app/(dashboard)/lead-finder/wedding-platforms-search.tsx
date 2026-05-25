@@ -208,7 +208,7 @@ export function WeddingPlatformsSearch() {
                   businessName: row.name,
                   website: row.website || "",
                   phone: row.phone || "",
-                  leadType: selectedCategory?.leadType || "wedding",
+                  leadType: (selectedCategory?.leadType || "wedding") as "wedding" | "corporate" | "real_estate" | "architectural",
                   source: `theknot`,
                   address: row.location,
                 });
@@ -399,10 +399,11 @@ export function WeddingPlatformsSearch() {
                           <td colSpan={columns.length} className="px-4 py-3">
                             <ContactResults
                               businessName={vendor.name}
-                              website={vendor.website}
+                              websiteUrl={vendor.website}
                               phone={vendor.phone}
-                              location={vendor.location}
+                              businessAddress={vendor.location}
                               leadType={selectedCategory?.leadType || "wedding"}
+                              leadSource="theknot"
                             />
                           </td>
                         </tr>

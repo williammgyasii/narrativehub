@@ -45,25 +45,21 @@ export default async function DashboardPage() {
         </div>
         <div className="flex gap-2">
           <Button
-            asChild
+            render={<Link href="/lead-finder" />}
             variant="outline"
             size="sm"
             className="border-white/10 bg-transparent text-zinc-300 hover:bg-white/4 hover:text-white"
           >
-            <Link href="/lead-finder">
-              <Search className="mr-1.5 h-4 w-4" />
-              Find Leads
-            </Link>
+            <Search className="mr-1.5 h-4 w-4" />
+            Find Leads
           </Button>
           <Button
-            asChild
+            render={<Link href="/leads?new=true" />}
             size="sm"
             className="bg-gold text-black hover:bg-gold-light"
           >
-            <Link href="/leads?new=true">
-              <Plus className="mr-1.5 h-4 w-4" />
-              Add Lead
-            </Link>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Add Lead
           </Button>
         </div>
       </div>
@@ -107,15 +103,13 @@ export default async function DashboardPage() {
                 Upcoming Events
               </CardTitle>
               <Button
-                asChild
+                render={<Link href="/events" />}
                 variant="ghost"
                 size="sm"
                 className="text-zinc-400 hover:text-gold"
               >
-                <Link href="/events">
-                  View all
-                  <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </Link>
+                View all
+                <ArrowRight className="ml-1 h-3.5 w-3.5" />
               </Button>
             </CardHeader>
             <CardContent>
@@ -124,12 +118,12 @@ export default async function DashboardPage() {
                   <CalendarDays className="mb-3 h-10 w-10 text-zinc-700" />
                   <p className="text-sm text-zinc-500">No upcoming events</p>
                   <Button
-                    asChild
+                    render={<Link href="/events/new" />}
                     variant="outline"
                     size="sm"
                     className="mt-4 border-white/10 text-zinc-300 hover:bg-white/4"
                   >
-                    <Link href="/events/new">Schedule an Event</Link>
+                    Schedule an Event
                   </Button>
                 </div>
               ) : (
@@ -176,15 +170,13 @@ export default async function DashboardPage() {
                 Recent Leads
               </CardTitle>
               <Button
-                asChild
+                render={<Link href="/leads" />}
                 variant="ghost"
                 size="sm"
                 className="text-zinc-400 hover:text-gold"
               >
-                <Link href="/leads">
-                  View all
-                  <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                </Link>
+                View all
+                <ArrowRight className="ml-1 h-3.5 w-3.5" />
               </Button>
             </CardHeader>
             <CardContent>
@@ -193,14 +185,12 @@ export default async function DashboardPage() {
                   <Users className="mb-3 h-10 w-10 text-zinc-700" />
                   <p className="text-sm text-zinc-500">No leads yet</p>
                   <Button
-                    asChild
+                    render={<Link href="/lead-finder" />}
                     size="sm"
                     className="mt-4 bg-gold text-black hover:bg-gold-light"
                   >
-                    <Link href="/lead-finder">
-                      <Search className="mr-1.5 h-4 w-4" />
-                      Find Leads
-                    </Link>
+                    <Search className="mr-1.5 h-4 w-4" />
+                    Find Leads
                   </Button>
                 </div>
               ) : (
@@ -251,44 +241,36 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-2">
               <Button
-                asChild
+                render={<Link href="/leads?new=true" />}
                 variant="outline"
                 className="h-auto flex-col gap-2 border-white/10 py-4 text-zinc-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold"
               >
-                <Link href="/leads?new=true">
-                  <Plus className="h-5 w-5" />
-                  <span className="text-xs">Add Lead</span>
-                </Link>
+                <Plus className="h-5 w-5" />
+                <span className="text-xs">Add Lead</span>
               </Button>
               <Button
-                asChild
+                render={<Link href="/events/new" />}
                 variant="outline"
                 className="h-auto flex-col gap-2 border-white/10 py-4 text-zinc-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold"
               >
-                <Link href="/events/new">
-                  <CalendarDays className="h-5 w-5" />
-                  <span className="text-xs">New Event</span>
-                </Link>
+                <CalendarDays className="h-5 w-5" />
+                <span className="text-xs">New Event</span>
               </Button>
               <Button
-                asChild
+                render={<Link href="/outreach/compose" />}
                 variant="outline"
                 className="h-auto flex-col gap-2 border-white/10 py-4 text-zinc-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold"
               >
-                <Link href="/outreach/compose">
-                  <Mail className="h-5 w-5" />
-                  <span className="text-xs">Outreach</span>
-                </Link>
+                <Mail className="h-5 w-5" />
+                <span className="text-xs">Outreach</span>
               </Button>
               <Button
-                asChild
+                render={<Link href="/lead-finder" />}
                 variant="outline"
                 className="h-auto flex-col gap-2 border-white/10 py-4 text-zinc-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold"
               >
-                <Link href="/lead-finder">
-                  <Search className="h-5 w-5" />
-                  <span className="text-xs">Find Leads</span>
-                </Link>
+                <Search className="h-5 w-5" />
+                <span className="text-xs">Find Leads</span>
               </Button>
             </CardContent>
           </Card>

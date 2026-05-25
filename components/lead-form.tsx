@@ -26,7 +26,9 @@ export function LeadForm({ lead, onSuccess }: LeadFormProps) {
         if (!result?.error) onSuccess?.();
         return result;
       }
-    : createLead;
+    : async (_prev: unknown, formData: FormData) => {
+        return createLead(formData);
+      };
 
   const [state, formAction, isPending] = useActionState(action, null);
 

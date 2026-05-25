@@ -200,17 +200,10 @@ export function GearChecklist({
         {/* Add from inventory */}
         {inventoryItems.length > 0 && (
           <Popover open={pickerOpen} onOpenChange={setPickerOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="w-full h-8 border-white/10 bg-white/2 text-zinc-400 hover:text-gold hover:border-gold/30 justify-start text-xs"
-              >
+            <PopoverTrigger render={<Button type="button" variant="outline" size="sm" className="w-full h-8 border-white/10 bg-white/2 text-zinc-400 hover:text-gold hover:border-gold/30 justify-start text-xs" />}>
                 <Package className="mr-1.5 h-3.5 w-3.5" />
                 Add from Inventory
                 <ChevronDown className="ml-auto h-3 w-3" />
-              </Button>
             </PopoverTrigger>
             <PopoverContent
               className="w-72 p-0 border-white/10 bg-surface"

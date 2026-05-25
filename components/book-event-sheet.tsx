@@ -28,7 +28,7 @@ export function BookEventSheet({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          trigger || (
+          (trigger as React.ReactElement) || (
             <Button
               size="sm"
               variant="outline"

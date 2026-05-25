@@ -22,33 +22,29 @@ export default async function OutreachPage() {
       >
         <div className="flex gap-2">
           <Button
-            asChild
+            render={<Link href="/outreach/templates" />}
             variant="outline"
             size="sm"
             className="border-white/10 text-zinc-300 hover:bg-white/4"
           >
-            <Link href="/outreach/templates">Templates</Link>
+            Templates
           </Button>
           <Button
-            asChild
+            render={<Link href="/outreach/bulk" />}
             variant="outline"
             size="sm"
             className="border-white/10 text-zinc-300 hover:bg-white/4"
           >
-            <Link href="/outreach/bulk">
-              <Users className="mr-1.5 h-4 w-4" />
-              Bulk Send
-            </Link>
+            <Users className="mr-1.5 h-4 w-4" />
+            Bulk Send
           </Button>
           <Button
-            asChild
+            render={<Link href="/outreach/compose" />}
             size="sm"
             className="bg-gold text-black hover:bg-gold-light"
           >
-            <Link href="/outreach/compose">
-              <Plus className="mr-1.5 h-4 w-4" />
-              Compose
-            </Link>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Compose
           </Button>
         </div>
       </PageHeader>
@@ -88,22 +84,20 @@ export default async function OutreachPage() {
         >
           <div className="flex gap-2">
             <Button
-              asChild
+              render={<Link href="/outreach/templates" />}
               variant="outline"
               size="sm"
               className="border-white/10 text-zinc-300 hover:bg-white/4"
             >
-              <Link href="/outreach/templates">Create Templates</Link>
+              Create Templates
             </Button>
             <Button
-              asChild
+              render={<Link href="/outreach/compose" />}
               size="sm"
               className="bg-gold text-black hover:bg-gold-light"
             >
-              <Link href="/outreach/compose">
-                <Plus className="mr-1.5 h-4 w-4" />
-                Compose Email
-              </Link>
+              <Plus className="mr-1.5 h-4 w-4" />
+              Compose Email
             </Button>
           </div>
         </EmptyState>

@@ -16,14 +16,12 @@ export default async function EventsPage() {
         description="Your booked shoots and upcoming sessions."
       >
         <Button
-          asChild
+          render={<Link href="/events/new" />}
           size="sm"
           className="bg-gold text-black hover:bg-gold-light"
         >
-          <Link href="/events/new">
-            <Plus className="mr-1.5 h-4 w-4" />
-            New Event
-          </Link>
+          <Plus className="mr-1.5 h-4 w-4" />
+          New Event
         </Button>
       </PageHeader>
 
@@ -34,14 +32,12 @@ export default async function EventsPage() {
           description="Create your first event when you book a shoot."
         >
           <Button
-            asChild
+            render={<Link href="/events/new" />}
             size="sm"
             className="bg-gold text-black hover:bg-gold-light"
           >
-            <Link href="/events/new">
-              <Plus className="mr-1.5 h-4 w-4" />
-              Schedule Event
-            </Link>
+            <Plus className="mr-1.5 h-4 w-4" />
+            Schedule Event
           </Button>
         </EmptyState>
       ) : (

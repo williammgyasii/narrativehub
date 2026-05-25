@@ -69,10 +69,8 @@ export function LeadsTable({ data }: { data: Lead[] }) {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
+            checked={table.getIsAllPageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
             onCheckedChange={(value) =>
               table.toggleAllPageRowsSelected(!!value)
             }
@@ -216,14 +214,12 @@ export function LeadsTable({ data }: { data: Lead[] }) {
                 />
               )}
               <Button
-                asChild
+                render={<Link href={`/leads/${lead.id}`} />}
                 size="sm"
                 variant="ghost"
                 className="h-8 w-8 p-0 text-zinc-500 hover:text-white"
               >
-                <Link href={`/leads/${lead.id}`}>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </Link>
+                <ExternalLink className="h-3.5 w-3.5" />
               </Button>
               <Button
                 size="sm"

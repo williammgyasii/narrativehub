@@ -21,15 +21,13 @@ export async function FollowUpReminders({ limit }: { limit?: number }) {
         </CardTitle>
         {reminders.length > (limit || Infinity) && (
           <Button
-            asChild
+            render={<Link href="/outreach" />}
             variant="ghost"
             size="sm"
             className="text-zinc-400 hover:text-gold"
           >
-            <Link href="/outreach">
-              View all
-              <ArrowRight className="ml-1 h-3.5 w-3.5" />
-            </Link>
+            View all
+            <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Button>
         )}
       </CardHeader>
@@ -66,17 +64,13 @@ export async function FollowUpReminders({ limit }: { limit?: number }) {
               </Badge>
               {entry.leadEmail && (
                 <Button
-                  asChild
+                  render={<Link href={`/outreach/compose?leadId=${entry.leadId}`} />}
                   size="sm"
                   variant="outline"
                   className="border-white/10 text-zinc-400 hover:border-gold/30 hover:text-gold shrink-0"
                 >
-                  <Link
-                    href={`/outreach/compose?leadId=${entry.leadId}`}
-                  >
-                    <Mail className="mr-1 h-3 w-3" />
-                    Follow up
-                  </Link>
+                  <Mail className="mr-1 h-3 w-3" />
+                  Follow up
                 </Button>
               )}
             </div>

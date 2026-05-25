@@ -43,15 +43,13 @@ export function RedditSummary({ leads, newCount }: RedditSummaryProps) {
           )}
         </div>
         <Button
-          asChild
+          render={<Link href="/reddit" />}
           variant="ghost"
           size="sm"
           className="text-zinc-400 hover:text-gold"
         >
-          <Link href="/reddit">
-            View all
-            <ArrowRight className="ml-1 h-3.5 w-3.5" />
-          </Link>
+          View all
+          <ArrowRight className="ml-1 h-3.5 w-3.5" />
         </Button>
       </CardHeader>
       <CardContent>
@@ -60,12 +58,12 @@ export function RedditSummary({ leads, newCount }: RedditSummaryProps) {
             <MessageSquare className="mb-2 h-8 w-8 text-zinc-700" />
             <p className="text-xs text-zinc-500">No new Reddit opportunities</p>
             <Button
-              asChild
+              render={<Link href="/reddit" />}
               variant="outline"
               size="sm"
               className="mt-3 border-white/10 text-zinc-400 hover:text-gold text-xs h-7"
             >
-              <Link href="/reddit">Scan subreddits</Link>
+              Scan subreddits
             </Button>
           </div>
         ) : (

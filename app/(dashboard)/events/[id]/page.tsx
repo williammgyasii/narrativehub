@@ -77,15 +77,13 @@ export default async function EventDetailPage({
     <div className="space-y-6">
       {/* Back */}
       <Button
-        asChild
+        render={<Link href="/events" />}
         variant="ghost"
         size="sm"
         className="text-zinc-400 hover:text-white"
       >
-        <Link href="/events">
-          <ArrowLeft className="mr-1.5 h-4 w-4" />
-          Back to Events
-        </Link>
+        <ArrowLeft className="mr-1.5 h-4 w-4" />
+        Back to Events
       </Button>
 
       {/* Hero Header */}
@@ -174,7 +172,7 @@ export default async function EventDetailPage({
                 Package
               </p>
               <p className="text-base sm:text-lg font-bold text-white leading-tight">
-                {formatCurrency(event.packagePrice)}
+                {formatCurrency(event.packagePrice ?? 0)}
               </p>
             </div>
           </div>
@@ -200,7 +198,7 @@ export default async function EventDetailPage({
         eventTitle={event.title}
         eventType={event.eventType}
         location={event.location}
-        packagePrice={event.packagePrice}
+        packagePrice={event.packagePrice ?? 0}
         paymentStatus={event.paymentStatus}
         initialDescription={event.description}
         initialClientRequests={event.clientRequests}

@@ -15,15 +15,13 @@ export default async function BulkOutreachPage() {
     <div className="space-y-6">
       <div>
         <Button
-          asChild
+          render={<Link href="/outreach" />}
           variant="ghost"
           size="sm"
           className="mb-4 text-zinc-400 hover:text-white"
         >
-          <Link href="/outreach">
-            <ArrowLeft className="mr-1.5 h-4 w-4" />
-            Back to Outreach
-          </Link>
+          <ArrowLeft className="mr-1.5 h-4 w-4" />
+          Back to Outreach
         </Button>
         <h1 className="font-heading text-3xl font-bold tracking-tight text-white">
           Bulk Outreach

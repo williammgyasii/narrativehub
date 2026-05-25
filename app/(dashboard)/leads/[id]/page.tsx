@@ -94,15 +94,13 @@ export default async function LeadDetailPage({
     <div className="space-y-6">
       {/* Back */}
       <Button
-        asChild
+        render={<Link href="/leads" />}
         variant="ghost"
         size="sm"
         className="text-zinc-400 hover:text-white"
       >
-        <Link href="/leads">
-          <ArrowLeft className="mr-1.5 h-4 w-4" />
-          Back to Leads
-        </Link>
+        <ArrowLeft className="mr-1.5 h-4 w-4" />
+        Back to Leads
       </Button>
 
       {/* Hero Header */}

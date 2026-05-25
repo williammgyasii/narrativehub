@@ -86,7 +86,7 @@ export function Sidebar() {
   }, [pathname, setMobileOpen]);
 
   return (
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider delay={0}>
       {/* Backdrop for mobile */}
       {mobileOpen && (
         <div
@@ -188,7 +188,7 @@ export function Sidebar() {
             if (collapsed) {
               return (
                 <Tooltip key={item.href}>
-                  <TooltipTrigger asChild>{link}</TooltipTrigger>
+                  <TooltipTrigger render={link} />
                   <TooltipContent side="right" className="hidden md:block bg-surface-hover text-zinc-200 border-white/10">
                     {item.label}
                   </TooltipContent>
@@ -207,10 +207,8 @@ export function Sidebar() {
               {/* Desktop collapsed: icon only with tooltip */}
               <div className="hidden md:block">
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex justify-center">
+                  <TooltipTrigger render={<div className="flex justify-center" />}>
                       <UserButton size="icon" />
-                    </div>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="bg-surface-hover text-zinc-200 border-white/10">
                     My Account

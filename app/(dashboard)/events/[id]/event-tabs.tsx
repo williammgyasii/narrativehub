@@ -198,8 +198,8 @@ function DetailsTab({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSavingDesc, startSavingDesc] = useTransition();
   const [isSavingReqs, startSavingReqs] = useTransition();
-  const descTimer = useRef<ReturnType<typeof setTimeout>>();
-  const reqsTimer = useRef<ReturnType<typeof setTimeout>>();
+  const descTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const reqsTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const saveDescription = useCallback(
     (value: string) => {
@@ -297,10 +297,8 @@ function DetailsTab({
                     />
                   )}
                   {lead.phone && (
-                    <Button asChild size="sm" variant="outline" className="flex-1 border-white/10 text-zinc-400 hover:text-white text-xs">
-                      <a href={`tel:${lead.phone}`}>
-                        <Phone className="mr-1 h-3 w-3" /> Call
-                      </a>
+                    <Button render={<a href={`tel:${lead.phone}`} />} size="sm" variant="outline" className="flex-1 border-white/10 text-zinc-400 hover:text-white text-xs">
+                      <Phone className="mr-1 h-3 w-3" /> Call
                     </Button>
                   )}
                 </div>

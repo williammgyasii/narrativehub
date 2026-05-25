@@ -158,17 +158,13 @@ export function OutreachTable({ data }: { data: OutreachEntry[] }) {
             return (
               <div className="flex items-center gap-1">
                 <Button
-                  asChild
+                  render={<Link href={`/outreach/compose?draftId=${entry.outreach.id}`} />}
                   size="sm"
                   variant="outline"
                   className="border-white/10 text-zinc-400 hover:text-white"
                 >
-                  <Link
-                    href={`/outreach/compose?draftId=${entry.outreach.id}`}
-                  >
-                    <FileEdit className="mr-1 h-3 w-3" />
-                    Edit
-                  </Link>
+                  <FileEdit className="mr-1 h-3 w-3" />
+                  Edit
                 </Button>
                 <Button
                   size="sm"

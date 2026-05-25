@@ -15,15 +15,13 @@ export default async function NewEventPage({
     <div className="space-y-6">
       <div>
         <Button
-          asChild
+          render={<Link href="/events" />}
           variant="ghost"
           size="sm"
           className="mb-4 text-zinc-400 hover:text-white"
         >
-          <Link href="/events">
-            <ArrowLeft className="mr-1.5 h-4 w-4" />
-            Back to Events
-          </Link>
+          <ArrowLeft className="mr-1.5 h-4 w-4" />
+          Back to Events
         </Button>
         <h1 className="font-heading text-3xl font-bold tracking-tight text-white">
           New Event

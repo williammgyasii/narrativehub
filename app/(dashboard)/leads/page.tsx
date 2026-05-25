@@ -54,12 +54,12 @@ export default async function LeadsPage() {
         >
           <div className="flex gap-2">
             <Button
-              asChild
+              render={<Link href="/lead-finder" />}
               variant="outline"
               size="sm"
               className="border-white/10 text-zinc-300 hover:bg-white/4"
             >
-              <Link href="/lead-finder">Find Leads</Link>
+              Find Leads
             </Button>
           </div>
         </EmptyState>

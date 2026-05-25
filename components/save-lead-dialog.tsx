@@ -213,15 +213,9 @@ export function SaveLeadDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 px-2 text-xs text-zinc-400 hover:text-gold"
-        >
+      <DialogTrigger render={<Button size="sm" variant="ghost" className="h-7 px-2 text-xs text-zinc-400 hover:text-gold" />}>
           <Plus className="mr-1 h-3 w-3" />
           Save
-        </Button>
       </DialogTrigger>
       <DialogContent className="border-white/10 bg-surface sm:max-w-md">
         <DialogHeader>
